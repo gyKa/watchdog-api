@@ -15,7 +15,7 @@ $config->required('DB_PASSWORD');
 
 $app = new Silex\Application();
 
-$app['debug'] = getenv('APP_DEBUG');
+$app['debug'] = filter_var(getenv('APP_DEBUG'), FILTER_VALIDATE_BOOLEAN);
 
 $app->register(new Silex\Provider\DoctrineServiceProvider(), [
     'db.options' => [
