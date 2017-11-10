@@ -33,7 +33,18 @@ $app->register(new Silex\Provider\TwigServiceProvider(), [
 ]);
 
 $app->get('/', function () use ($app) {
-    return $app['twig']->render('index.twig');
+    $sql = '
+        SELECT
+            (SELECT COUNT(*) FROM `logs`) as total_entries,
+            (SELECT created_at FROM `logs` ORDER BY created_at DESC LIMIT 1) as latest_created_entry
+    ';
+
+    $result = $app['db']->fetchAssoc($sql);
+
+    return $app['twig']->render('index.twig', [
+        'total_entries' => $result['total_entries'],
+        'latest_created_entry' => $result['latest_created_entry'],
+    ]);
 });
 
 $app->post('/collect', function (Request $request) use ($app) {
