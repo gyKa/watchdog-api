@@ -28,9 +28,12 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), [
     ],
 ]);
 $app->register(new Silex\Provider\ValidatorServiceProvider());
+$app->register(new Silex\Provider\TwigServiceProvider(), [
+    'twig.path' => __DIR__ . '/../views',
+]);
 
-$app->get('/', function () {
-    return time();
+$app->get('/', function () use ($app){
+    return $app['twig']->render('index.twig');
 });
 
 $app->post('/collect', function (Request $request) use ($app) {
@@ -63,7 +66,6 @@ $app->post('/collect', function (Request $request) use ($app) {
             'total_time' => [new Assert\Type(['type' => 'float'])],
         ]
     );
-
 
     /** @var ValidatorInterface $validator */
     $validator = $app['validator'];
