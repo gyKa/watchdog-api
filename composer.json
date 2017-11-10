@@ -1,6 +1,8 @@
 {
     "require": {
+        "php": ">=7.0",
         "silex/silex": "~2.0",
-        "doctrine/dbal": "~2.2"
+        "doctrine/dbal": "~2.2",
+        "vlucas/phpdotenv": "^2.4"
     }
 }
