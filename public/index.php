@@ -2,8 +2,11 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 $config = new Dotenv\Dotenv(dirname(__DIR__));
 $config->load();
@@ -24,6 +27,7 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), [
         'charset' => 'utf8mb4',
     ],
 ]);
+$app->register(new Silex\Provider\ValidatorServiceProvider());
 
 $app->get('/', function () {
     return time();
@@ -34,7 +38,49 @@ $app->post('/collect', function (Request $request) use ($app) {
         return new Response(null, Response::HTTP_BAD_REQUEST);
     }
 
+    $response = [
+        'success' => true,
+        'errors' => [],
+    ];
+
     $data = json_decode($request->getContent(), true);
+
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        $response['success'] = false;
+        $response['errors'][] = json_last_error_msg();
+
+        return new JsonResponse($response, Response::HTTP_BAD_REQUEST);
+    }
+
+    $constraint = new Assert\Collection(
+        [
+            'url' => [new Assert\Length(['min' => 12])],
+            'http_code' => [
+                new Assert\Type(['type' => 'integer']),
+                new Assert\Length(['min' => 3]),
+                new Assert\Length(['max' => 3]),
+            ],
+            'total_time' => [new Assert\Type(['type' => 'float'])],
+        ]
+    );
+
+
+    /** @var ValidatorInterface $validator */
+    $validator = $app['validator'];
+    $errors = $validator->validate($data, $constraint);
+
+    if (count($errors) > 0) {
+        $errorMessages = [];
+
+        foreach ($errors as $error) {
+            $errorMessages[] = sprintf('%s %s', $error->getPropertyPath(), $error->getMessage());
+        }
+
+        $response['success'] = false;
+        $response['errors'] = $errorMessages;
+
+        return new JsonResponse($response, Response::HTTP_BAD_REQUEST);
+    }
 
     $app['db']->insert(
         'logs',
@@ -45,7 +91,7 @@ $app->post('/collect', function (Request $request) use ($app) {
         ]
     );
 
-    return new Response(null, Response::HTTP_CREATED);
+    return new JsonResponse($response, Response::HTTP_CREATED);
 });
 
 $app->run();
