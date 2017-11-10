@@ -1,4 +1,7 @@
+.env.example
 .gitignore
+.git-ftp-ignore
+.git-ftp-include
 Makefile
 README.md
 composer.json
