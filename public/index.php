@@ -28,9 +28,6 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), [
     ],
 ]);
 $app->register(new Silex\Provider\ValidatorServiceProvider());
-$app->register(new Silex\Provider\TwigServiceProvider(), [
-    'twig.path' => __DIR__ . '/../views',
-]);
 
 $app->get('/', function () use ($app) {
     $sql = '
@@ -49,12 +46,7 @@ $app->get('/', function () use ($app) {
 
     $result = $app['db']->fetchAssoc($sql);
 
-    return $app['twig']->render('index.twig', [
-        'total_entries' => $result['total_entries'],
-        'total_fails' => $result['total_fails'],
-        'total_redirects' => $result['total_redirects'],
-        'latest_created_entry' => $result['latest_created_entry'],
-    ]);
+    return new JsonResponse($result);
 });
 
 $app->post('/collect', function (Request $request) use ($app) {

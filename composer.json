@@ -4,8 +4,7 @@
         "silex/silex": "~2.0",
         "doctrine/dbal": "~2.2",
         "vlucas/phpdotenv": "^2.4",
-        "symfony/validator": "^3.3",
-        "twig/twig": "^2.4"
+        "symfony/validator": "^3.3"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.1",
