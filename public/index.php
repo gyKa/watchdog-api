@@ -36,6 +36,14 @@ $app->get('/', function () use ($app) {
     $sql = '
         SELECT
             (SELECT COUNT(*) FROM `logs`) as total_entries,
+            (SELECT COUNT(*) FROM `logs` WHERE http_code NOT IN (200, 301, 302)) as total_fails,
+            (SELECT COUNT(*) FROM `logs` WHERE http_code IN (301, 302)) as total_redirects,
+            (SELECT created_at
+             FROM `logs`
+             WHERE 1
+                 AND http_code NOT IN (200, 301, 302)
+             ORDER BY created_at DESC
+             LIMIT 1) as latest_created_fail,
             (SELECT created_at FROM `logs` ORDER BY created_at DESC LIMIT 1) as latest_created_entry
     ';
 
@@ -43,6 +51,8 @@ $app->get('/', function () use ($app) {
 
     return $app['twig']->render('index.twig', [
         'total_entries' => $result['total_entries'],
+        'total_fails' => $result['total_fails'],
+        'total_redirects' => $result['total_redirects'],
         'latest_created_entry' => $result['latest_created_entry'],
     ]);
 });
