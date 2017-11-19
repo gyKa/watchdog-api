@@ -23,4 +23,4 @@ phpcpd:
 	vendor/bin/phpcpd public/index.php
 
 phpunit:
-	vendor/bin/phpunit tests/
+	vendor/bin/phpunit --coverage-clover=coverage.xml
