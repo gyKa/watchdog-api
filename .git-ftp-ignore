@@ -8,3 +8,5 @@ composer.lock
 database.sql
 Makefile
 README.md
+
+tests/*
