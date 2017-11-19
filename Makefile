@@ -1,5 +1,5 @@
 install:
-	composer install
+	composer install --no-interaction
 	cp .env.example .env
 
 server:
