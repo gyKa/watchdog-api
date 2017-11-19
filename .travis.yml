@@ -4,11 +4,12 @@ php:
   - 7.0
   - 7.1
 
-env:
-  - DB=mysql
+services:
+  - mysql
 
 before_script:
-  - if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS watchdog;" -uroot; fi
+  - mysql -uroot -e "create database IF NOT EXISTS watchdog;"
+  - mysql -uroot watchdog < database.sql
 
 script:
   - make install
