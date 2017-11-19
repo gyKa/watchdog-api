@@ -1,9 +1,10 @@
 .env.example
-.gitignore
 .git-ftp-ignore
 .git-ftp-include
-Makefile
-README.md
+.gitignore
+.travis.yml
 composer.json
 composer.lock
 database.sql
+Makefile
+README.md
