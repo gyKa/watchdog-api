@@ -8,7 +8,7 @@ server:
 deploy:
 	git ftp push
 
-qa: parallel-lint phpcs phpmd phpcpd
+qa: parallel-lint phpcs phpmd phpcpd phpunit
 
 parallel-lint:
 	vendor/bin/parallel-lint -e php public/index.php
@@ -21,3 +21,6 @@ phpmd:
 
 phpcpd:
 	vendor/bin/phpcpd public/index.php
+
+phpunit:
+	vendor/bin/phpunit tests/
