@@ -10,4 +10,6 @@ env:
 before_script:
   - if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS watchdog;" -uroot; fi
 
-script: make qa
+script:
+  - make install
+  - make qa
