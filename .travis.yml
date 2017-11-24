@@ -11,9 +11,9 @@ services:
 before_script:
   - mysql -uroot -e "create database IF NOT EXISTS watchdog;"
   - mysql -uroot watchdog < database.sql
+  - make install
 
 script:
-  - make install
   - make qa
 
 after_success:
