@@ -1,3 +1,5 @@
+DATETIME=`date +'%Y%m%d%H%M%S'`
+
 install:
 	composer install --no-interaction
 	cp .env.example .env
@@ -6,7 +8,11 @@ server:
 	php -S localhost:8000 -t public/
 
 deploy:
-	git ftp push
+	composer install --no-interaction --no-dev
+	git ftp push --disable-epsv
+	composer install --no-interaction
+	git tag $(DATETIME)
+	git push origin $(DATETIME)
 
 qa: parallel-lint phpcs phpmd phpcpd phpunit
 
