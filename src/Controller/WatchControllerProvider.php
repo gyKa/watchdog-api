@@ -101,6 +101,7 @@ class WatchControllerProvider implements ControllerProviderInterface
 
     /**
      * @param string $url \
+     * @throws \RuntimeException
      * @throws \DomainException
      */
     private function request(string $url)
@@ -114,7 +115,7 @@ class WatchControllerProvider implements ControllerProviderInterface
                 return;
             }
 
-            var_dump($stats->getHandlerErrorData());
+            throw new \RuntimeException('No response: ' . print_r($stats->getHandlerErrorData(), true));
         };
 
         $client->request('GET', $url, ['on_stats' => $onStat]);
