@@ -49,4 +49,3 @@ final class Response
         return $this->totalTime;
     }
 }
-

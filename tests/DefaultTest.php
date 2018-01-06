@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests;
+
 use Silex\WebTestCase;
 
 class DefaultTest extends WebTestCase
