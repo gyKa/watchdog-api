@@ -16,6 +16,12 @@ class DefaultTest extends WebTestCase
         $client = $this->createClient();
         $client->request('GET', '/');
 
-        $this->assertTrue($client->getResponse()->isOk());
+        $response = $client->getResponse();
+
+        if ($response === null) {
+            throw new \RuntimeException('Client got no response');
+        }
+
+        $this->assertTrue($response->isOk());
     }
 }

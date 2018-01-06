@@ -14,7 +14,7 @@ deploy:
 	git tag $(DATETIME)
 	git push origin $(DATETIME)
 
-qa: parallel-lint phpcs phpmd phpcpd phpunit
+qa: parallel-lint phpcs phpmd phpcpd phpstan phpunit
 
 parallel-lint:
 	vendor/bin/parallel-lint -e php public/ src/ tests/
@@ -30,6 +30,9 @@ phpcpd:
 
 phpunit:
 	vendor/bin/phpunit
+
+phpstan:
+	vendor/bin/phpstan analyse --level 7 src/ tests/ public/
 
 coverage:
 	vendor/bin/phpunit --coverage-clover=coverage.xml
