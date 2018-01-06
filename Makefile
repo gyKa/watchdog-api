@@ -17,16 +17,16 @@ deploy:
 qa: parallel-lint phpcs phpmd phpcpd phpunit
 
 parallel-lint:
-	vendor/bin/parallel-lint -e php public/index.php
+	vendor/bin/parallel-lint -e php public/ src/ tests/
 
 phpcs:
-	vendor/bin/phpcs --standard=PSR2 public/index.php
+	vendor/bin/phpcs --standard=PSR2 public/ src/ tests/
 
 phpmd:
-	vendor/bin/phpmd public/index.php text codesize,unusedcode,naming
+	vendor/bin/phpmd public/,src/,tests/ text codesize,unusedcode,naming
 
 phpcpd:
-	vendor/bin/phpcpd public/index.php
+	vendor/bin/phpcpd public/ src/ tests/
 
 phpunit:
 	vendor/bin/phpunit
