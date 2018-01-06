@@ -2,6 +2,7 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
+use Controller\WatchControllerProvider;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -108,6 +109,8 @@ $app->post('/collect', function (Request $request) use ($app) {
 
     return new JsonResponse($response, Response::HTTP_CREATED);
 });
+
+$app->mount('/watch', new WatchControllerProvider());
 
 $app->run();
 
