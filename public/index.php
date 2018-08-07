@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 $config = new Dotenv\Dotenv(dirname(__DIR__));
 $config->load();
-$config->required(['APP_DEBUG', 'DB_DATABASE', 'DB_USERNAME'])->notEmpty();
+$config->required(['APP_DEBUG', 'DB_DATABASE', 'DB_USERNAME', 'DB_HOSTNAME'])->notEmpty();
 $config->required('DB_PASSWORD');
 
 $app = new Silex\Application();
@@ -22,7 +22,7 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), [
     'db.options' => [
         'driver' => 'pdo_mysql',
         'dbname' => getenv('DB_DATABASE'),
-        'host' => '127.0.0.1',
+        'host' => getenv('DB_HOSTNAME'),
         'user' => getenv('DB_USERNAME'),
         'password' => getenv('DB_PASSWORD'),
         'charset' => 'utf8mb4',
